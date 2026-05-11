@@ -441,9 +441,9 @@
                     <input type="file" id="bukti">
     </div>
 
-    <button class="btn" onclick="konfirmasiPembayaran()">
-      Konfirmasi Pembayaran
-    </button>
+    <button type="button" class="btn" style="margin-top:25px;" onclick="kirimOrder()">
+  Konfirmasi Pembayaran
+</button>
   </div>
 </div>
 
@@ -505,27 +505,47 @@
 
     function kirimOrder(){
 
-      const userId = document.getElementById('userId').value;
-      const serverId = document.getElementById('serverId').value;
-      const produk = document.getElementById('produkSelect').value;
-      const wa = document.getElementById('wa').value;
-      const payment = document.getElementById('paymentMethod').value;
+  const userId = document.getElementById('userId').value;
+  const serverId = document.getElementById('serverId').value;
+  const produk = document.getElementById('produkSelect').value;
+  const wa = document.getElementById('wa').value;
+  const payment = document.getElementById('paymentMethod').value;
 
-      if(userId === '' || serverId === '' || wa === ''){
-        alert('Lengkapi semua data terlebih dahulu');
-        return;
-      }
+  if(userId === '' || serverId === '' || wa === ''){
+    alert('Lengkapi semua data terlebih dahulu');
+    return;
+  }
 
-      const admin = '6281548958578';
+  const admin = '62895358955012';
 
-      const pesan = `🟢 ORDER BARU WDP ML\n\n📦 Produk:\n${produk}\n\n🆔 ID ML:\n${userId}\n\n🌐 Server:\n${serverId}\n\n📱 WhatsApp:\n${wa}\n\n💳 Pembayaran:\n${payment}\n\n📌 Silakan kirim bukti transfer di chat ini agar pesanan segera diproses admin.`;
+  const pesan = `
+🟢 ORDER BARU WDP ML
 
-      document.getElementById('statusBox').style.display = 'block';
+📦 Produk:
+${produk}
 
-      window.location.href =
-`window.location.href =
-https://wa.me/${admin}?text=${encodeURIComponent(pesan)}`;
-    }
+🆔 ID ML:
+${userId}
+
+🌐 Server:
+${serverId}
+
+📱 WhatsApp:
+${wa}
+
+💳 Pembayaran:
+${payment}
+
+📌 Silakan kirim bukti transfer di chat ini agar pesanan segera diproses admin.
+`;
+
+  const url =
+`https://wa.me/${admin}?text=${encodeURIComponent(pesan)}`;
+
+  window.location.href = url;
+
+}
+    
   </script>
 
 <script>
@@ -548,60 +568,6 @@ function konfirmasiPembayaran(){
 </script>
 </body>
 </html>
-```
-
-````
-
-## Fitur Payment Otomatis (Konfirmasi Pembayaran)
-
-Tambahkan bagian ini tepat di atas `</body>` agar user bisa upload bukti pembayaran setelah order.
-
-```html
-
-````
-
-## Jika Ingin Payment Gateway Otomatis
-
-Kamu bisa menggunakan:
-
-* Midtrans
-* Tripay
-* Duitku
-* Xendit
-
-Fitur yang bisa didapat:
-
-* QRIS otomatis
-* Dana
-* OVO
-* GoPay
-* Virtual Account
-* Status pembayaran otomatis
-* Order otomatis masuk admin
-
-Untuk versi profesional biasanya memakai:
-
-* Frontend: HTML/CSS/JavaScript
-* Backend: Node.js atau PHP
-* Database: Firebase atau Supabase
-
-## Cara Menggunakan
-
-1. Salin semua kode di atas.
-2. Simpan dengan nama `index.html`.
-3. Ganti nomor WhatsApp admin:
-
-```js
-const nomorAdmin = '6281234567890';
-```
-
-Menjadi nomor WhatsApp kamu.
-
-Contoh:
-
-```js
-const nomorAdmin = '628xxxxxxxxxx';
-```
 
 4. Upload ke GitHub Pages, Netlify, atau hosting biasa.
 5. Website siap dipakai.

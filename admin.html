@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#070b1a;
+color:white;
+display:flex;
+min-height:100vh;
+overflow:hidden;
+}
+
+.sidebar{
+width:260px;
+background:#0d1328;
+padding:30px 20px;
+border-right:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+margin-bottom:40px;
+}
+
+.logo span{
+color:#00e5ff;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu a{
+text-decoration:none;
+color:white;
+padding:15px;
+border-radius:15px;
+background:rgba(255,255,255,0.05);
+transition:0.3s;
+}
+
+.menu a:hover{
+background:#00e5ff;
+color:black;
+}
+
+.main{
+flex:1;
+padding:30px;
+overflow:auto;
+display:none;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:25px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.card h2{
+font-size:35px;
+color:#00e5ff;
+margin-top:10px;
+}
+
+.table-box{
+background:rgba(255,255,255,0.05);
+padding:25px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,0.1);
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:15px;
+text-align:left;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+th{
+color:#00e5ff;
+}
+
+.status{
+padding:8px 15px;
+border-radius:20px;
+font-size:14px;
+font-weight:700;
+display:inline-block;
+}
+
+.pending{
+background:rgba(255,193,7,0.2);
+color:#ffc107;
+}
+
+.success{
+background:rgba(0,255,128,0.2);
+color:#00ff95;
+}
+
+.btn{
+border:none;
+padding:10px 18px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.btn-success{
+background:#00e676;
+color:black;
+}
+
+.btn-delete{
+background:#ff5252;
+color:white;
+}
+
+.login-page{
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.login-box{
+background:rgba(255,255,255,0.05);
+padding:40px;
+border-radius:25px;
+width:350px;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+}
+
+.login-box h1{
+margin-bottom:25px;
+text-align:center;
+}
+
+.input{
+width:100%;
+padding:15px;
+border:none;
+outline:none;
+border-radius:15px;
+margin-bottom:15px;
+background:rgba(255,255,255,0.08);
+color:white;
+}
+
+.login-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+background:#00e5ff;
+font-weight:700;
+cursor:pointer;
+}
+
+.logout-btn{
+background:#ff5252;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+font-weight:700;
+}
+
+@media(max-width:800px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+}
+</style>
+</head>
+<body>
+
+<div class="login-page" id="loginPage">
+
+<div class="login-box">
+
+<h1>Admin Login</h1>
+
+<input type="email" id="email" class="input" placeholder="Email">
+<input type="password" id="password" class="input" placeholder="Password">
+
+<button class="login-btn" onclick="login()">Login</button>
+
+</div>
+
+</div>
+
+<div class="sidebar">
+
+<div class="logo">
+FS<span>Admin</span>
+</div>
+
+<div class="menu">
+<a href="#">Dashboard</a>
+<a href="#">Pesanan</a>
+<a href="#">Produk</a>
+<a href="#">Pengaturan</a>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>Dashboard Admin</h1>
+
+<button class="logout-btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<p>Total Pesanan</p>
+<h2 id="totalPesanan">0</h2>
+</div>
+
+<div class="card">
+<p>Pesanan Hari Ini</p>
+<h2 id="pesananHariIni">0</h2>
+</div>
+
+<div class="card">
+<p>Total Pendapatan</p>
+<h2 id="totalPendapatan">Rp0</h2>
+</div>
+
+<div class="card">
+<p>Produk Aktif</p>
+<h2>7</h2>
+</div>
+
+</div>
+
+<div class="table-box">
+
+<h2>Pesanan Masuk</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Game</th>
+<th>Produk</th>
+<th>Harga</th>
+<th>Status</th>
+<th>Aksi</th>
+</tr>
+</thead>
+
+<tbody id="orderTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+
+import {
+getFirestore,
+collection,
+onSnapshot,
+doc,
+updateDoc,
+deleteDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+const firebaseConfig = {
+apiKey: "AIzaSyAzb9JptZufQ1EHQmdsWXDpFaYpubMuA6c",
+authDomain: "furrystore-2c18b.firebaseapp.com",
+projectId: "furrystore-2c18b",
+storageBucket: "furrystore-2c18b.firebasestorage.app",
+messagingSenderId: "1083213573371",
+appId: "1:1083213573371:web:0167790eb54ccb728f945e",
+measurementId: "G-55PT54K5JX"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+const orderTable=document.getElementById('orderTable');
+
+let pesananData=[];
+
+async function login(){
+
+const email=document.getElementById('email').value;
+const password=document.getElementById('password').value;
+
+try{
+
+await signInWithEmailAndPassword(auth,email,password);
+
+alert('Login berhasil');
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+}
+
+window.login=login;
+
+async function logout(){
+
+await signOut(auth);
+
+location.reload();
+
+}
+
+window.logout=logout;
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+document.getElementById('loginPage').style.display='none';
+
+document.querySelector('.main').style.display='block';
+
+loadPesanan();
+
+}else{
+
+document.getElementById('loginPage').style.display='flex';
+
+document.querySelector('.main').style.display='none';
+
+}
+
+});
+
+function updateStatistik(){
+
+const totalPesanan=pesananData.length;
+
+const hariIni=new Date().toLocaleDateString();
+
+const pesananHariIni=pesananData.filter(item=>{
+
+if(!item.createdAt)return false;
+
+const tanggal=item.createdAt.toDate().toLocaleDateString();
+
+return tanggal===hariIni;
+
+}).length;
+
+let totalPendapatan=0;
+
+pesananData.forEach(item=>{
+
+const angka=parseInt(
+String(item.harga).replace(/[^0-9]/g,'')
+)||0;
+
+if(item.status==='Selesai'){
+
+totalPendapatan+=angka;
+
+}
+
+});
+
+document.getElementById('totalPesanan').innerText=totalPesanan;
+
+document.getElementById('pesananHariIni').innerText=pesananHariIni;
+
+document.getElementById('totalPendapatan').innerText=
+'Rp'+totalPendapatan.toLocaleString('id-ID');
+
+}
+
+function loadPesanan(){
+
+onSnapshot(collection(db,'pesananML'),(snapshot)=>{
+
+orderTable.innerHTML='';
+
+pesananData=[];
+
+snapshot.forEach((docSnap)=>{
+
+const item=docSnap.data();
+
+item.docId=docSnap.id;
+
+pesananData.push(item);
+
+const tr=document.createElement('tr');
+
+tr.innerHTML=`
+<td>${item.gameId}</td>
+<td>${item.produk}</td>
+<td>${item.harga}</td>
+<td>
+<span class="status ${item.status==='Pending'?'pending':'success'}">
+${item.status}
+</span>
+</td>
+<td>
+<button class="btn btn-success" onclick="selesai('${item.docId}')">
+Selesai
+</button>
+
+<button class="btn btn-delete" onclick="hapus('${item.docId}')">
+Hapus
+</button>
+</td>
+`;
+
+orderTable.appendChild(tr);
+
+});
+
+updateStatistik();
+
+});
+
+}
+
+async function selesai(id){
+
+await updateDoc(doc(db,'pesananML',id),{
+status:'Selesai'
+});
+
+}
+
+window.selesai=selesai;
+
+async function hapus(id){
+
+await deleteDoc(doc(db,'pesananML',id));
+
+}
+
+window.hapus=hapus;
+
+</script>
+
+</body>
+</html>
+```
